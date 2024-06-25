@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import app from "./app";
-import config from "./config";
+import config from "./app/config";
 
 async function main() {
-  console.log(config.db_uri);
-  console.log(config.port);
+  // console.log(config.db_uri);
+  // console.log(config.port);
   try {
     await mongoose.connect(config.db_uri as string);
     app.listen(config.port, () => {
