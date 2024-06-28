@@ -12,4 +12,9 @@ router.post(
   CarControllers.createCar
 );
 
+router.get("/", CarControllers.getCallCars);
+router.get("/:id", CarControllers.getSingleCar);
+router.put("/:id", CarControllers.updateCar);
+router.delete("/:id", CarControllers.deleteCar);
+
 export const CarRouter = router;
