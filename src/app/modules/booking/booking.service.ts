@@ -6,8 +6,9 @@ const createBookingIntoDB = async (bookingData: TBooking) => {
   return createBooking;
 };
 
-const getAllBookings = async () => {
-  const allBookings = await Booking.find().populate("carId");
+const getAllBookings = async (query: Record<string, unknown>) => {
+  console.log(query);
+  const allBookings = await Booking.find(query).populate("carId");
   return allBookings;
 };
 export const BookingServices = { createBookingIntoDB, getAllBookings };

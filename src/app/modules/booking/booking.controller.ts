@@ -17,7 +17,8 @@ const createBooking: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const getAllBookings: RequestHandler = catchAsync(async (req, res) => {
-  const allBookings = await BookingServices.getAllBookings();
+  // Extract query parameters from the request object
+  const allBookings = await BookingServices.getAllBookings(req?.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -10,6 +10,10 @@ router.post(
   validateRequest(userValidation.userValidationSchema),
   UserControllers.createUser
 );
-router.post("/signin", UserControllers.singIn);
+router.post(
+  "/signin",
+  validateRequest(userValidation.userSingInValidationSchema),
+  UserControllers.singIn
+);
 
 export const AuthRoutes = router;

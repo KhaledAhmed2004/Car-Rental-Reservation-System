@@ -1,7 +1,8 @@
 import { Schema, model } from "mongoose";
-import { TUserCreate, TUserSignIn } from "./user.interface";
-
-const userCreateSchema = new Schema<TUserCreate>(
+import { TUserCreate, UserModel } from "./user.interface";
+import bcrypt from "bcrypt";
+import config from "../../config";
+const userCreateSchema = new Schema<TUserCreate, UserModel>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -12,5 +13,30 @@ const userCreateSchema = new Schema<TUserCreate>(
   },
   { timestamps: true }
 );
+userCreateSchema.pre("save", async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+    // Number("10")
+  );
+  next();
+});
+// set '' after saving password
+userCreateSchema.post("save", function (doc, next) {
+  doc.password = "";
+  next();
+});
 
-export const User = model<TUserCreate>("User", userCreateSchema);
+userCreateSchema.statics.isUserIsExistsByEmail = async function (
+  email: string
+) {
+  return await User.findOne({ email });
+};
+userCreateSchema.statics.isPasswordMatched = async function (
+  plainTextPassword,
+  hashPassword
+) {
+  return await bcrypt.compare(plainTextPassword, hashPassword);
+};
+export const User = model<TUserCreate, UserModel>("User", userCreateSchema);

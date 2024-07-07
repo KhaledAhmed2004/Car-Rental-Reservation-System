@@ -11,8 +11,10 @@ const userValidationSchema = z.object({
 });
 
 const userSingInValidationSchema = z.object({
-  email: z.string().email("Invalid eamil address"),
-  password: z.string({ invalid_type_error: "Password must be string" }),
+  body: z.object({
+    email: z.string().email("Invalid eamil address"),
+    password: z.string({ invalid_type_error: "Password must be string" }),
+  }),
 });
 export const userValidation = {
   userValidationSchema,
