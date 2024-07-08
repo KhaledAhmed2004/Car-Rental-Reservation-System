@@ -12,7 +12,6 @@ const createUserIntoDB = async (userData: TUserCreate) => {
 
 const signIn = async (payload: TUserSignIn) => {
   const user = await User.isUserIsExistsByEmail(payload?.email);
-  // console.log(user._id);
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "This user did not found");
   }

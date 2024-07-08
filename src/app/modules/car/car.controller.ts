@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import { CarService } from "./car.service";
 
 const createCar: RequestHandler = catchAsync(async (req, res) => {
+  console.log(req.user);
   const carData = req?.body;
   const car = await CarService.createCarIntoDB(carData);
 

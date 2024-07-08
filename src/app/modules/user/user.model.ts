@@ -6,7 +6,7 @@ const userCreateSchema = new Schema<TUserCreate, UserModel>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: 0 },
     role: { type: String, enum: ["user", "admin"] },
     phone: { type: String, required: true },
     address: { type: String, required: true },
@@ -31,7 +31,8 @@ userCreateSchema.post("save", function (doc, next) {
 userCreateSchema.statics.isUserIsExistsByEmail = async function (
   email: string
 ) {
-  return await User.findOne({ email });
+  // return await User.findOne({ email });
+  return await User.findOne({ email }).select("+password");
 };
 userCreateSchema.statics.isPasswordMatched = async function (
   plainTextPassword,
