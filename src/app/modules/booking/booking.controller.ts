@@ -5,7 +5,8 @@ import { BookingServices } from "./booking.service";
 import { RequestHandler } from "express";
 
 const createBooking: RequestHandler = catchAsync(async (req, res) => {
-  const bookingData = req?.body;
+  const { userId } = req.user;
+  const bookingData = { ...req.body, userId };
   const booking = await BookingServices.createBookingIntoDB(bookingData);
 
   sendResponse(res, {
@@ -18,6 +19,7 @@ const createBooking: RequestHandler = catchAsync(async (req, res) => {
 
 const getAllBookings: RequestHandler = catchAsync(async (req, res) => {
   // Extract query parameters from the request object
+
   const allBookings = await BookingServices.getAllBookings(req?.query);
 
   sendResponse(res, {
@@ -28,4 +30,16 @@ const getAllBookings: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-export const BookingControllers = { createBooking, getAllBookings };
+const myBookings = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+  console.log(userId);
+  const myBookings = await BookingServices.getMyBookings(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "My Bookings retrieved successfully",
+    data: myBookings,
+  });
+});
+export const BookingControllers = { createBooking, getAllBookings, myBookings };

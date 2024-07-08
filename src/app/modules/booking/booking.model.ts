@@ -8,6 +8,11 @@ const BookingSchema = new Schema<TBooking>({
     ref: "Car",
     required: true,
   },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   startTime: {
     type: String,
     required: true,

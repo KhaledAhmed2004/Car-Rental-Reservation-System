@@ -18,6 +18,6 @@ router.post(
 router.get("/", CarControllers.getCallCars);
 router.get("/:id", CarControllers.getSingleCar);
 router.put("/:id", auth(USER_ROLE.admin), CarControllers.updateCar);
-router.delete("/:id", CarControllers.deleteCar);
+router.delete("/:id", auth(USER_ROLE.admin), CarControllers.deleteCar);
 
 export const CarRouter = router;

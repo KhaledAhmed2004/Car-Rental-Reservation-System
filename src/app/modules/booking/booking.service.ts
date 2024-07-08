@@ -2,13 +2,27 @@ import { TBooking } from "./booking.interface";
 import { Booking } from "./booking.model";
 
 const createBookingIntoDB = async (bookingData: TBooking) => {
-  const createBooking = await Booking.create(bookingData);
+  // console.log(userId);
+  const createBooking = (
+    await (await Booking.create(bookingData)).populate("carId")
+  ).populate("userId");
   return createBooking;
 };
 
 const getAllBookings = async (query: Record<string, unknown>) => {
-  console.log(query);
-  const allBookings = await Booking.find(query).populate("carId");
+  const allBookings = await Booking.find(query)
+    .populate("carId")
+    .populate("userId");
   return allBookings;
 };
-export const BookingServices = { createBookingIntoDB, getAllBookings };
+const getMyBookings = async (userId: string) => {
+  const myAllBookings = await Booking.find({ userId })
+    .populate("carId")
+    .populate("userId");
+  return myAllBookings;
+};
+export const BookingServices = {
+  createBookingIntoDB,
+  getAllBookings,
+  getMyBookings,
+};
