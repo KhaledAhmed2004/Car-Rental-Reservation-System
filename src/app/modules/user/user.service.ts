@@ -2,8 +2,9 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TUserCreate, TUserSignIn } from "./user.interface";
 import { User } from "./user.model";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
+import { createToken } from "../auth/auth.utils";
 
 const createUserIntoDB = async (userData: TUserCreate) => {
   const create = await User.create(userData);
@@ -28,12 +29,50 @@ const signIn = async (payload: TUserSignIn) => {
     userId: user._id,
     role: user.role,
   };
-  const token = jwt.sign(jwtPayload, config.jwt_assess_secret as string, {
-    expiresIn: "10d",
-  });
+  const token = createToken(
+    jwtPayload,
+    config.jwt_assess_secret as string,
+    "1d"
+  );
+
+  const refreshtoken = createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    "365d"
+  );
+
   return {
     user,
     token,
+    refreshtoken,
   };
 };
-export const UserServices = { createUserIntoDB, signIn };
+
+const refreshToken = async (token: string) => {
+  // checking if the given token is valid
+  const decoded = jwt.verify(
+    token,
+    config.jwt_refresh_secret as string
+  ) as JwtPayload;
+
+  const user = await User.isUserIsExistsByEmail(payload?.email);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "This user did not found");
+  }
+
+  const jwtPayload = {
+    userId: user._id,
+    role: user.role,
+  };
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_assess_secret as string,
+    "1d"
+  );
+
+  return {
+    accessToken,
+  };
+};
+
+export const UserServices = { createUserIntoDB, signIn, refreshToken };

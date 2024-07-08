@@ -7,4 +7,5 @@ export default {
   db_uri: process.env.MONGO_URI,
   bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
   jwt_assess_secret: process.env.JWT_ACCESS_SECRET,
+  jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
 };

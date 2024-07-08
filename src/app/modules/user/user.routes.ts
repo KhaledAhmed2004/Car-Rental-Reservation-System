@@ -16,5 +16,10 @@ router.post(
   validateRequest(userValidation.userSingInValidationSchema),
   UserControllers.singIn
 );
+// router.post(
+//   "/refresh-token",
+//   validateRequest(userValidation.refreshtokenValidationSchema),
+//   UserControllers.refreshToken
+// );
 
 export const AuthRoutes = router;

@@ -16,7 +16,13 @@ const userSingInValidationSchema = z.object({
     password: z.string({ invalid_type_error: "Password must be string" }),
   }),
 });
+const refreshtokenValidationSchema = z.object({
+  cookies: z.object({
+    refreshtoken: z.string({ required_error: "Refresh token is requreid" }),
+  }),
+});
 export const userValidation = {
   userValidationSchema,
   userSingInValidationSchema,
+  refreshtokenValidationSchema,
 };
