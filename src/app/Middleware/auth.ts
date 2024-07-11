@@ -8,7 +8,8 @@ import { TUserRole } from "../modules/user/user.interface";
 
 const auth = (role: TUserRole) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const token = req?.headers?.authorization;
+    // const token = req?.headers?.authorization;
+    const token = req.headers.authorization?.split(" ")[1];
     // if the token is send from the client
     if (!token) {
       throw new AppError(
@@ -30,8 +31,6 @@ const auth = (role: TUserRole) => {
           );
         }
         const decodedRole = (decoded as JwtPayload)?.role;
-        // console.log('thsi: ',(decodedRole && role));
-        // console.log("auth: ", role);
 
         // decoded undefined
         if (decodedRole !== role) {

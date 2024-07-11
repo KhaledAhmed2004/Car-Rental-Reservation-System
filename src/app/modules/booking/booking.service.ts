@@ -7,7 +7,6 @@ import httpStatus from "http-status";
 const createBookingIntoDB = async (bookingData: TBooking) => {
   const carId = bookingData.carId;
   const car = await Car.findById(carId);
-  console.log(car);
 
   if (!car || car.isDeleted || car.status !== "available") {
     throw new AppError(
@@ -18,7 +17,7 @@ const createBookingIntoDB = async (bookingData: TBooking) => {
 
   car.status = "unavailable";
   await car.save();
-  // console.log(userId);
+
   const createBooking = (
     await (await Booking.create(bookingData)).populate("carId")
   ).populate("userId");

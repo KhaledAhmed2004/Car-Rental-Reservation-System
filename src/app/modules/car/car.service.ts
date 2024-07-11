@@ -1,5 +1,9 @@
+import httpStatus from "http-status";
+import AppError from "../../errors/AppError";
+import { Booking } from "../booking/booking.model";
 import { TCar } from "./car.interface";
 import { Car } from "./car.model";
+import { calculateTotalCost } from "../../utils/calculateTotalCost";
 
 const createCarIntoDB = async (carData: TCar) => {
   const createCar = await Car.create(carData);
@@ -30,11 +34,35 @@ const deleteCarFromDB = async (id: string) => {
 };
 
 const returnTheCar = async (payload: Record<string, string>) => {
-  const bookingId = payload.bookingId;
-  const endTime = payload.endTime;
-  console.log(bookingId,endTime);
-  const update = await Car.findByIdAndUpdate(payload, { new: true });
-  return update;
+  const { bookingId, endTime } = payload;
+  const booking = await Booking.findById(bookingId)
+    .populate("carId")
+    .populate("userId");
+  if (!booking || booking.endTime) {
+    throw new AppError(
+      httpStatus.NOT_EXTENDED,
+      "Invalid booking ID or car already returned"
+    );
+  }
+  booking.endTime = endTime;
+
+  const car = await Car.findById(booking.carId);
+
+  if (car) {
+    car.status = "available";
+    await car.save();
+  }
+
+  const pricePerHour = car?.pricePerHour;
+  console.log(pricePerHour);
+
+  booking.totalCost = calculateTotalCost(
+    pricePerHour as number,
+    booking.startTime,
+    booking.endTime
+  );
+  await booking.save();
+  return booking;
 };
 
 export const CarService = {

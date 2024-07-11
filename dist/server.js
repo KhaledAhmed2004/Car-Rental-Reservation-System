@@ -14,13 +14,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
-main().catch((err) => console.log(err));
+const config_1 = __importDefault(require("./app/config"));
+// Declare a variable to hold the server instance
+let server;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield mongoose_1.default.connect("mongodb://127.0.0.1:27017/test");
-        app_1.default.listen(5000, () => {
-            console.log(`Example app listening on port ${5000}`);
-        });
+        try {
+            // Attempt to connect to the MongoDB database using Mongoose
+            yield mongoose_1.default.connect(config_1.default.db_uri);
+            // Start the Express server and listen on the configured port
+            server = app_1.default.listen(config_1.default.port, () => {
+                console.log(`Example app listening on port ${config_1.default.port}`);
+            });
+        }
+        catch (error) {
+            // Log any errors that occur during the connection or server startup
+            console.log(error);
+        }
     });
 }
+// Call the main function to initialize the database connection and start the server
 main();
+// Handle unhandled promise rejections to ensure graceful shutdown
+process.on("unhandledRejection", () => {
+    // Log a message indicating that an unhandled promise rejection has been detected
+    console.log(`😈 unhandledRejection is detected , shutting down ...`);
+    if (server) {
+        // If the server is running, close it gracefully and then exit the process with an error code
+        server.close(() => {
+            process.exit(1);
+        });
+    }
+    else {
+        // If the server is not running, exit the process immediately with an error code
+        process.exit(1);
+    }
+});
+// Handle uncaught exceptions to ensure graceful shutdown
+process.on("uncaughtException", () => {
+    console.log(`😈 uncaughtException is detected , shutting down ...`);
+    // Exit the process immediately with an error code
+    process.exit(1);
+});

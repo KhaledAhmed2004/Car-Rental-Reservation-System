@@ -26,7 +26,7 @@ const signIn = async (payload: TUserSignIn) => {
   }
   //create token and send to the client
   const jwtPayload = {
-    userId: user._id,
+    userId: user._id as string,
     role: user.role,
   };
   const token = createToken(
@@ -48,31 +48,31 @@ const signIn = async (payload: TUserSignIn) => {
   };
 };
 
-const refreshToken = async (token: string) => {
-  // checking if the given token is valid
-  const decoded = jwt.verify(
-    token,
-    config.jwt_refresh_secret as string
-  ) as JwtPayload;
+// const refreshToken = async (token: string) => {
+//   // checking if the given token is valid
+//   const decoded = jwt.verify(
+//     token,
+//     config.jwt_refresh_secret as string
+//   ) as JwtPayload;
 
-  const user = await User.isUserIsExistsByEmail(payload?.email);
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, "This user did not found");
-  }
+//   const user = await User.isUserIsExistsByEmail(payload?.email);
+//   if (!user) {
+//     throw new AppError(httpStatus.NOT_FOUND, "This user did not found");
+//   }
 
-  const jwtPayload = {
-    userId: user._id,
-    role: user.role,
-  };
-  const accessToken = createToken(
-    jwtPayload,
-    config.jwt_assess_secret as string,
-    "1d"
-  );
+//   const jwtPayload = {
+//     userId: user._id as string,
+//     role: user.role,
+//   };
+//   const accessToken = createToken(
+//     jwtPayload,
+//     config.jwt_assess_secret as string,
+//     "1d"
+//   );
 
-  return {
-    accessToken,
-  };
-};
+//   return {
+//     accessToken,
+//   };
+// };
 
-export const UserServices = { createUserIntoDB, signIn, refreshToken };
+export const UserServices = { createUserIntoDB, signIn };

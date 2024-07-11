@@ -36,19 +36,18 @@ const singIn: RequestHandler = catchAsync(async (req, res) => {
     },
   });
 });
-const refreshToken: RequestHandler = catchAsync(async (req, res) => {
-  const { refreshToken } = req.cookies;
-  const result = await UserServices.refreshToken(refreshToken);
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Assess token is retrive succesfully!",
-    data: result,
-  });
-});
+// const refreshToken: RequestHandler = catchAsync(async (req, res) => {
+//   const { refreshToken } = req.cookies;
+//   const result = await UserServices.refreshToken(refreshToken);
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "Assess token is retrive succesfully!",
+//     data: result,
+//   });
+// });
 
 export const UserControllers = {
   createUser,
   singIn,
-  refreshToken,
 };
