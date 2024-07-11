@@ -46,7 +46,6 @@ const updateCar: RequestHandler = catchAsync(async (req, res) => {
   const updatedCar = await CarService.updateCar(id, updatedData);
   console.log("update:", updateCar);
 
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -67,10 +66,14 @@ const deleteCar: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const returnTheCar: RequestHandler = catchAsync(async (req, res) => {
+  console.log(req?.body);
+});
 export const CarControllers = {
   createCar,
   getCallCars,
   getSingleCar,
   updateCar,
   deleteCar,
+  returnTheCar,
 };

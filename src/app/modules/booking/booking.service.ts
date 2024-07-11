@@ -1,7 +1,23 @@
+import { Car } from "../car/car.model";
 import { TBooking } from "./booking.interface";
 import { Booking } from "./booking.model";
+import AppError from "../../errors/AppError";
+import httpStatus from "http-status";
 
 const createBookingIntoDB = async (bookingData: TBooking) => {
+  const carId = bookingData.carId;
+  const car = await Car.findById(carId);
+  console.log(car);
+
+  if (!car || car.isDeleted || car.status !== "available") {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "Car is not available for booking"
+    );
+  }
+
+  car.status = "unavailable";
+  await car.save();
   // console.log(userId);
   const createBooking = (
     await (await Booking.create(bookingData)).populate("carId")

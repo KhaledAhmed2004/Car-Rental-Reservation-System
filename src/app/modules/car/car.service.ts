@@ -29,10 +29,19 @@ const deleteCarFromDB = async (id: string) => {
   return deleting;
 };
 
+const returnTheCar = async (payload: Record<string, string>) => {
+  const bookingId = payload.bookingId;
+  const endTime = payload.endTime;
+  console.log(bookingId,endTime);
+  const update = await Car.findByIdAndUpdate(payload, { new: true });
+  return update;
+};
+
 export const CarService = {
   createCarIntoDB,
   getAllCarsFromDB,
   getSingleCarFromDB,
   updateCar,
   deleteCarFromDB,
+  returnTheCar,
 };
