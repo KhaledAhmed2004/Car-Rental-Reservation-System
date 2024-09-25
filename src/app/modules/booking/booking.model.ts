@@ -22,6 +22,13 @@ const BookingSchema = new Schema<TBooking>({
     default: null,
   },
   totalCost: { type: Number, default: 0 },
+  nidOrPassport: { type: String, required: true },
+  drivingLicense: { type: String, required: true },
+  // paymentInformation: { type: String, required: true },
+  additionalOptions: {
+    gps: { type: Boolean, default: false },
+    childSeat: { type: Boolean, default: false },
+  },
 });
 
 export const Booking = model<TBooking>("Booking", BookingSchema);

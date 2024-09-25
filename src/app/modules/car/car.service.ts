@@ -9,10 +9,58 @@ const createCarIntoDB = async (carData: TCar) => {
   const createCar = await Car.create(carData);
   return createCar;
 };
-const getAllCarsFromDB = async () => {
-  const getAllCars = await Car.find();
-  return getAllCars;
+
+const getAllCarsFromDB = async (
+  searchQuery?: string,
+  selectedTransmission?: string,
+  selectedFuelType?: string,
+  type?: string[],
+  // selectedBrands?: string
+  selectedBrands?: string[]
+) => {
+  // Base filter object
+  let filter: any = {};
+
+  // If searchQuery is provided, create a filter to match brand, model, or carType
+  if (searchQuery) {
+    const query = new RegExp(searchQuery, "i"); // Case-insensitive search using regex
+    filter = {
+      $or: [{ brand: query }, { model: query }, { carType: query }],
+    };
+  }
+
+  // If selectedTransmission is provided, add it to the filter
+  if (selectedTransmission) {
+    filter.transmission = selectedTransmission;
+  }
+
+  // If selectedFuelType is provided, add it to the filter
+  if (selectedFuelType) {
+    filter.fuelType = selectedFuelType; // Assuming your DB has a 'fuelType' field
+  }
+
+  // Add type (assuming it's another filterable field) to the filter
+  if (type) {
+    filter.carType = type; // Assuming 'type' is a field in the DB
+  }
+  // if (selectedBrands) {
+  //   filter.brand = selectedBrands; // Assuming 'type' is a field in the DB
+  // }
+  // If selectedBrands is an array, use $in to match any brand from the array
+  if (selectedBrands && selectedBrands.length > 0) {
+    filter.brand = { $in: selectedBrands };
+  }
+
+  // If type is an array and contains elements, add it to the filter
+  if (type && type.length > 0) {
+    filter.carType = { $in: type }; // Assuming 'carType' is a field in the DB
+  }
+
+  // Query the database with the built filter
+  const cars = await Car.find(filter);
+  return cars;
 };
+
 const getSingleCarFromDB = async (id: string) => {
   const GetSingleCar = await Car.findById(id);
   return GetSingleCar;

@@ -5,8 +5,6 @@ const userValidationSchema = z.object({
     email: z.string().email("Invalid email address"),
     password: z.string({ invalid_type_error: "Password must be string" }),
     role: z.enum(["user", "admin"]),
-    phone: z.string(),
-    address: z.string(),
   }),
 });
 

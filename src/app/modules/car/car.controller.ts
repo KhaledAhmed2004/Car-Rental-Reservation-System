@@ -18,7 +18,30 @@ const createCar: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const getCallCars: RequestHandler = catchAsync(async (req, res) => {
-  const getCallCars = await CarService.getAllCarsFromDB();
+  const {
+    searchQuery,
+    selectedTransmission,
+    selectedFuelType,
+    type,
+    selectedBrands,
+  } = req.query;
+
+  // Parse selectedBrands as an array if it comes as a comma-separated string, or set to undefined if empty
+  const brandsArray = selectedBrands
+    ? (selectedBrands as string).split(",")
+    : undefined;
+
+  // Parse type as an array if it comes as a comma-separated string, or set to undefined if empty
+  const typeArray = type ? (type as string).split(",") : undefined;
+
+  // const getCallCars = await CarService.getAllCarsFromDB();
+  const getCallCars = await CarService.getAllCarsFromDB(
+    searchQuery as string,
+    selectedTransmission as string,
+    selectedFuelType as string,
+    typeArray as string[],
+    brandsArray as string[]
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -8,8 +8,6 @@ const userCreateSchema = new Schema<TUserCreate, UserModel>(
     email: { type: String, required: true },
     password: { type: String, required: true, select: 0 },
     role: { type: String, enum: ["user", "admin"] },
-    phone: { type: String, required: true },
-    address: { type: String, required: true },
   },
   { timestamps: true }
 );

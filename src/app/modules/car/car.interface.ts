@@ -1,10 +1,20 @@
 export type TCar = {
-  name: string;
-  description: string;
+  brand: string;
+  model: string;
   color: string;
-  isElectric: boolean;
+  description: string;
+  pricePerHour: number;
+  fuelType: "Gasoline" | "Diesel" | "Electric" | "Hybrid";
+  transmission: "Automatic" | "Manual";
+  seats: number;
+  luggageCapacity: number;
+  doors: number;
+  rating: number;
   status: "available" | "unavailable";
   features: string[];
-  pricePerHour: number;
+  images: string[];
+  // location: string;
+  mileage: number;
   isDeleted: boolean;
+  carType: "suv" | "economy" | "luxury" | "electric";
 };
