@@ -32,7 +32,7 @@ const createCarSchema = new Schema<TCar>({
   isDeleted: { type: Boolean, default: false },
   carType: {
     type: String,
-    enum: ["suv", "economy", "luxury", "electric"],
+    enum: ["SUV", "Economy", "Luxury", "Electric"],
     required: true,
   },
 });

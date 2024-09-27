@@ -7,6 +7,7 @@ export type TBooking = {
   startTime: string;
   endTime: string | null;
   totalCost: number;
+  status?: string;
   nidOrPassport: string;
   drivingLicense: string;
   // paymentInformation: string;

@@ -7,6 +7,7 @@ import { RequestHandler } from "express";
 const createBooking: RequestHandler = catchAsync(async (req, res) => {
   const { userId } = req.user;
   const bookingData = { ...req.body, userId };
+  // console.log(bookingData);
   const booking = await BookingServices.createBookingIntoDB(bookingData);
 
   sendResponse(res, {
@@ -30,6 +31,24 @@ const getAllBookings: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const updateBookingStatus: RequestHandler = catchAsync(async (req, res) => {
+  const { bookingId } = req.params; // Get booking ID from route parameters
+  const { status } = req.body; // Get status from the request body
+
+  // Call the service to update the booking's status
+  const updatedBooking = await BookingServices.updateBookingStatus(
+    bookingId,
+    status
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Booking status updated successfully",
+    data: updatedBooking,
+  });
+});
+
 const myBookings = catchAsync(async (req, res) => {
   const { userId } = req.user;
   console.log(userId);
@@ -42,4 +61,9 @@ const myBookings = catchAsync(async (req, res) => {
     data: myBookings,
   });
 });
-export const BookingControllers = { createBooking, getAllBookings, myBookings };
+export const BookingControllers = {
+  updateBookingStatus,
+  createBooking,
+  getAllBookings,
+  myBookings,
+};

@@ -24,6 +24,10 @@ const getCallCars: RequestHandler = catchAsync(async (req, res) => {
     selectedFuelType,
     type,
     selectedBrands,
+    selectedColors,
+    minPrice,
+    maxPrice,
+    availableNow,
   } = req.query;
 
   // Parse selectedBrands as an array if it comes as a comma-separated string, or set to undefined if empty
@@ -34,13 +38,28 @@ const getCallCars: RequestHandler = catchAsync(async (req, res) => {
   // Parse type as an array if it comes as a comma-separated string, or set to undefined if empty
   const typeArray = type ? (type as string).split(",") : undefined;
 
+  // Parse selectedColors as an array if it comes as a comma-separated string, or set to undefined if empty
+  const colorsArray = selectedColors
+    ? (selectedColors as string).split(",")
+    : undefined;
+
+  // Parse minPrice and maxPrice to numbers, or set to undefined if not provided
+  const parsedMinPrice = minPrice ? Number(minPrice) : undefined;
+  const parsedMaxPrice = maxPrice ? Number(maxPrice) : undefined;
+
+  // Parse availableNow to a boolean (true/false)
+  const parsedAvailableNow = availableNow === "true";
   // const getCallCars = await CarService.getAllCarsFromDB();
   const getCallCars = await CarService.getAllCarsFromDB(
     searchQuery as string,
     selectedTransmission as string,
     selectedFuelType as string,
     typeArray as string[],
-    brandsArray as string[]
+    brandsArray as string[],
+    colorsArray as string[],
+    parsedMinPrice,
+    parsedMaxPrice,
+    parsedAvailableNow
   );
 
   sendResponse(res, {

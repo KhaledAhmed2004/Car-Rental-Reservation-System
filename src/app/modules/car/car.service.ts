@@ -16,7 +16,11 @@ const getAllCarsFromDB = async (
   selectedFuelType?: string,
   type?: string[],
   // selectedBrands?: string
-  selectedBrands?: string[]
+  selectedBrands?: string[],
+  selectedColors?: string[],
+  minPrice?: number,
+  maxPrice?: number,
+  availableNow?: boolean
 ) => {
   // Base filter object
   let filter: any = {};
@@ -54,6 +58,24 @@ const getAllCarsFromDB = async (
   // If type is an array and contains elements, add it to the filter
   if (type && type.length > 0) {
     filter.carType = { $in: type }; // Assuming 'carType' is a field in the DB
+  }
+
+  // If selectedColors is an array, use $in to match any color from the array
+  if (selectedColors && selectedColors.length > 0) {
+    filter.color = { $in: selectedColors }; // Assuming 'color' is a field in the DB
+  }
+
+  if (minPrice !== undefined && maxPrice !== undefined) {
+    filter.pricePerHour = { $gte: minPrice, $lte: maxPrice };
+  } else if (minPrice !== undefined) {
+    filter.pricePerHour = { $gte: minPrice };
+  } else if (maxPrice !== undefined) {
+    filter.pricePerHour = { $lte: maxPrice };
+  }
+
+  // Filter for available cars if availableNow is true
+  if (availableNow === true) {
+    filter.status = "available"; // Assuming your car model has an 'isAvailable' field
   }
 
   // Query the database with the built filter

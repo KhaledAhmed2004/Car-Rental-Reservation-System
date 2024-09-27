@@ -14,5 +14,11 @@ router.post(
   BookingControllers.createBooking
 );
 router.get("/", auth(USER_ROLE.admin), BookingControllers.getAllBookings);
+router.patch(
+  "/:bookingId/status",
+  auth(USER_ROLE.admin),
+  BookingControllers.updateBookingStatus
+);
+
 router.get("/my-bookings", auth(USER_ROLE.user), BookingControllers.myBookings);
 export const BookingRouter = router;
