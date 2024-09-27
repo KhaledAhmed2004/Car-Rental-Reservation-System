@@ -49,6 +49,23 @@ const updateBookingStatus = async (bookingId: string, status: string) => {
   return booking;
 };
 
+const deleteBooking = async (bookingId: string) => {
+  const booking = await Booking.findById(bookingId);
+
+  if (!booking) {
+    throw new AppError(httpStatus.NOT_FOUND, "Booking not found");
+  }
+  // Find the associated car and set its status to "available"
+  const car = await Car.findById(booking.carId);
+  if (car) {
+    car.status = "available";
+    await car.save();
+  }
+  // Delete the booking from the database
+  // await booking.remove();
+  await Booking.findByIdAndDelete(bookingId);
+};
+
 const getMyBookings = async (userId: string) => {
   const myAllBookings = await Booking.find({ userId })
     .populate("carId")
@@ -59,5 +76,6 @@ export const BookingServices = {
   createBookingIntoDB,
   getAllBookings,
   getMyBookings,
+  deleteBooking,
   updateBookingStatus,
 };
