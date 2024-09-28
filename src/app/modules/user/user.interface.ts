@@ -7,6 +7,7 @@ export interface TUserCreate {
   email: string;
   password: string;
   role: "user" | "admin";
+  status?: "active" | "block";
 }
 
 export type TUserSignIn = {

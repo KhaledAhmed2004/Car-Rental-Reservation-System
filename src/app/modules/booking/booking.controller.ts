@@ -65,7 +65,7 @@ const deleteBooking: RequestHandler = catchAsync(async (req, res) => {
 
 const myBookings = catchAsync(async (req, res) => {
   const { userId } = req.user;
-  console.log(userId);
+  // console.log(userId);
   const myBookings = await BookingServices.getMyBookings(userId);
 
   sendResponse(res, {

@@ -5,7 +5,6 @@ import httpStatus from "http-status";
 import { CarService } from "./car.service";
 
 const createCar: RequestHandler = catchAsync(async (req, res) => {
-  console.log(req.cookies);
   const carData = req?.body;
   const car = await CarService.createCarIntoDB(carData);
 
@@ -86,7 +85,6 @@ const updateCar: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req?.params;
   const updatedData = req?.body;
   const updatedCar = await CarService.updateCar(id, updatedData);
-  console.log("update:", updateCar);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -19,8 +19,19 @@ const refreshtokenValidationSchema = z.object({
     refreshtoken: z.string({ required_error: "Refresh token is requreid" }),
   }),
 });
+const updateUserValidationSchema = z.object({
+  body: z.object({
+    name: z.string().optional(),
+    email: z.string().optional(),
+    password: z.string().optional(),
+    role: z.enum(["user", "admin"]).optional(),
+    status: z.enum(["active", "block"]).optional(),
+  }),
+});
+
 export const userValidation = {
   userValidationSchema,
   userSingInValidationSchema,
   refreshtokenValidationSchema,
+  updateUserValidationSchema,
 };

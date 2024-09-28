@@ -6,10 +6,8 @@ import httpStatus from "http-status";
 
 const createBookingIntoDB = async (bookingData: TBooking) => {
   const car = await Car.findById(bookingData.carId);
-  // console.log("Booking Data:", bookingData);
-  // console.log("Car Object:", car);
+
   if (!car || car.isDeleted || car.status !== "available") {
-    console.log(car);
     throw new AppError(
       httpStatus.NOT_FOUND,
       "Car is not available for booking"

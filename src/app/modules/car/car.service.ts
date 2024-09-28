@@ -124,7 +124,6 @@ const returnTheCar = async (payload: Record<string, string>) => {
   }
 
   const pricePerHour = car?.pricePerHour;
-  console.log(pricePerHour);
 
   booking.totalCost = calculateTotalCost(
     pricePerHour as number,

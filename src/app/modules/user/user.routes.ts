@@ -6,10 +6,28 @@ import auth from "../../Middleware/auth";
 
 const router = express.Router();
 
+router.get(
+  "/users/:id",
+  //  auth,
+  UserControllers.getUserById
+);
+
+router.put(
+  "/users/:id",
+  // auth,
+  // validateRequest(userValidation.updateUserValidationSchema),
+  UserControllers.updateUser
+);
+
 router.post(
   "/signup",
   validateRequest(userValidation.userValidationSchema),
   UserControllers.createUser
+);
+router.get(
+  "/users",
+  //  auth,
+  UserControllers.getAllUsers
 );
 router.post(
   "/signin",
